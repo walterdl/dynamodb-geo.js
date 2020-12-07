@@ -80,6 +80,10 @@ export class DynamoDBManager {
 
       const queryOutput = await this.config.dynamoDBClient.query({ ...defaults, ...queryInput })
         .promise()
+        .then(result => {
+          console.log('Result performing queryGeohash', result)
+          return result
+        })
         .catch(error => {
           console.log('Raw error in queryGeohash', error);
           console.log('Stringed error in queryGeohash', error + '');

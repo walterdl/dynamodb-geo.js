@@ -115,6 +115,10 @@ var DynamoDBManager = /** @class */ (function () {
                                             };
                                             return [4 /*yield*/, this.config.dynamoDBClient.query(__assign(__assign({}, defaults), queryInput))
                                                     .promise()
+                                                    .then(function (result) {
+                                                    console.log('Result performing queryGeohash', result);
+                                                    return result;
+                                                })
                                                     .catch(function (error) {
                                                     console.log('Raw error in queryGeohash', error);
                                                     console.log('Stringed error in queryGeohash', error + '');
