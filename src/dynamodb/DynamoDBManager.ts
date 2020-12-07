@@ -78,7 +78,13 @@ export class DynamoDBManager {
         ExclusiveStartKey: lastEvaluatedKey
       };
 
-      const queryOutput = await this.config.dynamoDBClient.query({ ...defaults, ...queryInput }).promise();
+      const queryOutput = await this.config.dynamoDBClient.query({ ...defaults, ...queryInput })
+        .promise()
+        .catch(error => {
+          console.log('Raw error in queryGeohash', error);
+          console.log('Stringed error in queryGeohash', error + '');
+          throw error;
+        });
       queryOutputs.push(queryOutput);
       if (queryOutput.LastEvaluatedKey) {
         return nextQuery(queryOutput.LastEvaluatedKey);

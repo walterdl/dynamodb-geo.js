@@ -227,12 +227,18 @@ export class GeoDataManager {
    * @return Result of radius query request.
    * */
   public async queryRadius(queryRadiusInput: QueryRadiusInput): Promise<DynamoDB.ItemList> {
-    const latLngRect: S2LatLngRect = S2Util.getBoundingLatLngRectFromQueryRadiusInput(queryRadiusInput);
+    console.log('Performing queryRadius with logs')
+    try {
+      const latLngRect: S2LatLngRect = S2Util.getBoundingLatLngRectFromQueryRadiusInput(queryRadiusInput);
 
-    const covering = new Covering(new this.config.S2RegionCoverer().getCoveringCells(latLngRect));
+      const covering = new Covering(new this.config.S2RegionCoverer().getCoveringCells(latLngRect));
 
-    const results = await this.dispatchQueries(covering, queryRadiusInput);
-    return this.filterByRadius(results, queryRadiusInput);
+      const results = await this.dispatchQueries(covering, queryRadiusInput);
+      return this.filterByRadius(results, queryRadiusInput);
+    } catch(error) {
+      console.log('Error performing queryRadius', error)
+      throw error;
+    }
   }
 
   /**
